@@ -32,20 +32,8 @@ jobs:
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - name: Debug installed packages
-        run: |
-          composer show phpunit/phpunit || true
-          ls vendor/phpunit || true
-
-
       - name: Generate key
         run: php artisan key:generate
-
-      - name: Check Artisan Version
-        run: php artisan --version
-
-      - name: List Artisan Commands
-        run: php artisan list
 
       - name: Run Tests
         env:
