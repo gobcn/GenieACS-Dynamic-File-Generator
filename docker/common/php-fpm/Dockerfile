@@ -29,8 +29,6 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progre
 FROM php:8.4-fpm
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libicu72 \
-    libzip4 \
     libfcgi-bin \
     procps \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
