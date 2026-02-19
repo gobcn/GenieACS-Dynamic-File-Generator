@@ -35,6 +35,12 @@ jobs:
       - name: Generate key
         run: php artisan key:generate
 
+      - name: Check Artisan Version
+        run: php artisan --version
+
+      - name: List Artisan Commands
+        run: php artisan list
+
       - name: Run Tests
         env:
           DB_CONNECTION: sqlite
