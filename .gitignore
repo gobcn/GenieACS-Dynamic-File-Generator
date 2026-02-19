@@ -12,5 +12,6 @@ npm-debug.log
 yarn-error.log
 /bootstrap/cache/*.php
 /storage/framework/views/*
+/storage/framework/sessions/*
 .phpunit.cache
 .phpunit.cache/
