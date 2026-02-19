@@ -22,14 +22,18 @@ jobs:
       - name: Copy .env
         run: cp .env.example .env
 
+      - name: Prepare Laravel Directories
+        run: |
+          mkdir -p storage/framework/{sessions,views,cache}
+          mkdir -p storage/logs
+          mkdir -p bootstrap/cache
+          chmod -R 775 storage bootstrap/cache
+
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist
 
       - name: Generate key
         run: php artisan key:generate
-
-      - name: Set Directory Permissions
-        run: chmod -R 775 storage bootstrap/cache
 
       - name: Run Tests
         env:
