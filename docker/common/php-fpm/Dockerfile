@@ -47,6 +47,12 @@ WORKDIR /var/www
 # -----------------------------------------------------------
 COPY . /var/www
 
+# Set storage and cache permissions
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+    && mkdir -p storage/logs \
+    && mkdir -p bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+
 # Install Composer and dependencies
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
