@@ -20,10 +20,21 @@ COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
 COPY . .
 
-RUN mkdir -p storage bootstrap/cache \
+# Ensure Laravel runtime directories exist
+RUN mkdir -p \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
+RUN composer install \
+    --no-dev \
+    --optimize-autoloader \
+    --no-interaction \
+    --no-progress \
+    --prefer-dist
 
 # Stage 2: Production environment
 FROM php:8.4-fpm
@@ -33,13 +44,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     procps \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Copy compiled extensions and config
 COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
+
+# Copy application
 COPY --from=builder /var/www /var/www
 
 WORKDIR /var/www
 
-RUN chown -R www-data:www-data /var/www
+# Ensure correct permissions at runtime
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 775 storage bootstrap/cache
 
 USER www-data
 
